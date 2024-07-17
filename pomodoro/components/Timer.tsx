@@ -2,18 +2,36 @@ import { useEffect, useState } from "react";
 import { View, Text, Button, Pressable } from "react-native";
 
 export function Timer() {
-  const [countdownTime, setCountdownTime] = useState({ min: 25, sec: 0 });
-  const [isRunning, setIsRunning] = useState(true);
+  const isBreakInit = false;
+  const workDuration = { min: 25, sec: 0 };
+  const breakDuration = { min: 5, sec: 0 };
+  const isRunningInit = true;
 
+  const [countdownTime, setCountdownTime] = useState(workDuration);
+  const [isRunning, setIsRunning] = useState(isRunningInit);
+  const [isBreak, setIsBreak] = useState(isBreakInit);
+
+  //reset timer when switching between work and break
   useEffect(() => {
+    console.log("isBreak", isBreak);
+    setCountdownTime(isBreak ? breakDuration : workDuration);
+    setIsRunning(true);
+  }, [isBreak]);
+
+  //update timer
+  useEffect(() => {
+    console.log("isRunning", isRunning);
+
     let interval: NodeJS.Timeout | undefined;
 
     if (isRunning) {
       interval = setInterval(() => {
         setCountdownTime((prev) => {
+          console.log("prev", prev);
           if (prev.min === 0 && prev.sec === 0) {
             clearInterval(interval);
-            // todo: start break timer
+            setIsBreak((prevIsBreak) => !prevIsBreak);
+            setIsRunning(false);
             return prev;
           }
 
@@ -24,11 +42,7 @@ export function Timer() {
         });
       }, 1000);
     }
-
-    return () => {
-      console.log("clearing interval");
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [isRunning]);
 
   return (
