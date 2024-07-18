@@ -13,21 +13,17 @@ export function Timer() {
 
   //reset timer when switching between work and break
   useEffect(() => {
-    console.log("isBreak", isBreak);
     setCountdownTime(isBreak ? breakDuration : workDuration);
     setIsRunning(true);
   }, [isBreak]);
 
   //update timer
   useEffect(() => {
-    console.log("isRunning", isRunning);
-
     let interval: NodeJS.Timeout | undefined;
 
     if (isRunning) {
       interval = setInterval(() => {
         setCountdownTime((prev) => {
-          console.log("prev", prev);
           if (prev.min === 0 && prev.sec === 0) {
             clearInterval(interval);
             setIsBreak((prevIsBreak) => !prevIsBreak);
