@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, Button, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
+import {
+  GestureDetector,
+  Gesture,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 export function Timer() {
   const isBreakInit = false;
@@ -11,9 +16,12 @@ export function Timer() {
   const [isRunning, setIsRunning] = useState(isRunningInit);
   const [isBreak, setIsBreak] = useState(isBreakInit);
 
+  function setDuration() {
+    setCountdownTime(isBreak ? breakDuration : workDuration);
+  }
   //reset timer when switching between work and break
   useEffect(() => {
-    setCountdownTime(isBreak ? breakDuration : workDuration);
+    setDuration();
   }, [isBreak]);
 
   //update timer
@@ -40,13 +48,39 @@ export function Timer() {
     return () => clearInterval(interval);
   }, [isRunning]);
 
+  const [allowPress, setAllowPress] = useState(true);
+  const handlePan = Gesture.Pan()
+    .onStart(() => setAllowPress(false))
+    .onEnd((event: any) => {
+      if (
+        Math.abs(event.translationY) > Math.abs(event.translationX) &&
+        event.translationY > 0
+      ) {
+        setIsRunning(false);
+        setDuration();
+      }
+    });
+
+  const handlePress = () => {
+    if (allowPress) {
+      setIsRunning((prev) => !prev);
+    }
+  };
+
   return (
     <View>
-      <Pressable onPress={() => setIsRunning((prev) => !prev)}>
-        <Text>
-          {countdownTime.min} : {countdownTime.sec}
-        </Text>
-      </Pressable>
+      <GestureHandlerRootView>
+        <GestureDetector gesture={handlePan}>
+          <Pressable
+            onPressIn={() => setAllowPress(true)}
+            onPress={handlePress}
+          >
+            <Text>
+              {countdownTime.min} : {countdownTime.sec}
+            </Text>
+          </Pressable>
+        </GestureDetector>
+      </GestureHandlerRootView>
     </View>
   );
 }
