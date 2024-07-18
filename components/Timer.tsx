@@ -5,16 +5,15 @@ export function Timer() {
   const isBreakInit = false;
   const workDuration = { min: 25, sec: 0 };
   const breakDuration = { min: 5, sec: 0 };
-  const isRunningInit = true;
+  const isRunningInit = false;
 
-  const [countdownTime, setCountdownTime] = useState(workDuration);
+  const [countdownTime, setCountdownTime] = useState({ min: 0, sec: 0 });
   const [isRunning, setIsRunning] = useState(isRunningInit);
   const [isBreak, setIsBreak] = useState(isBreakInit);
 
   //reset timer when switching between work and break
   useEffect(() => {
     setCountdownTime(isBreak ? breakDuration : workDuration);
-    setIsRunning(true);
   }, [isBreak]);
 
   //update timer
