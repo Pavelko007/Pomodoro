@@ -19,6 +19,9 @@ export function Timer() {
   function setDuration() {
     setCountdownTime(isBreak ? breakDuration : workDuration);
   }
+  const toggleIsBreak = () => {
+    setIsBreak((prevIsBreak) => !prevIsBreak);
+  };
   //reset timer when switching between work and break
   useEffect(() => {
     setDuration();
@@ -66,8 +69,7 @@ export function Timer() {
         event.translationY > 0
       ) {
         handleSwipeDown();
-      }
-      else if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+      } else if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
         handleSwipeLeftRight();
       }
     });
@@ -94,8 +96,4 @@ export function Timer() {
       </GestureHandlerRootView>
     </View>
   );
-
-  function toggleIsBreak() {
-    setIsBreak((prevIsBreak) => !prevIsBreak);
-  }
 }
