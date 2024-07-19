@@ -16,15 +16,12 @@ export function Timer() {
   const [isRunning, setIsRunning] = useState(isRunningInit);
   const [isBreak, setIsBreak] = useState(isBreakInit);
 
-  function setDuration() {
-    setCountdownTime(isBreak ? breakDuration : workDuration);
-  }
   const toggleIsBreak = () => {
     setIsBreak((prevIsBreak) => !prevIsBreak);
   };
   //reset timer when switching between work and break
   useEffect(() => {
-    setDuration();
+    setCountdownTime(isBreak ? breakDuration : workDuration);
   }, [isBreak]);
 
   //update timer
@@ -51,7 +48,7 @@ export function Timer() {
 
   const handleSwipeDown = () => {
     setIsRunning(false);
-    setDuration();
+    setCountdownTime(workDuration);
   };
   const handleSwipeLeftRight = () => {
     toggleIsBreak();
