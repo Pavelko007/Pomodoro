@@ -48,6 +48,11 @@ export function Timer() {
     return () => clearInterval(interval);
   }, [isRunning]);
 
+  const handleSwipeDown = () => {
+    setIsRunning(false);
+    setDuration();
+  };
+
   const [allowPress, setAllowPress] = useState(true);
   const handlePan = Gesture.Pan()
     .onStart(() => setAllowPress(false))
@@ -56,8 +61,7 @@ export function Timer() {
         Math.abs(event.translationY) > Math.abs(event.translationX) &&
         event.translationY > 0
       ) {
-        setIsRunning(false);
-        setDuration();
+        handleSwipeDown();
       }
     });
 
