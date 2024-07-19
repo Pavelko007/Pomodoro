@@ -33,7 +33,7 @@ export function Timer() {
         setCountdownTime((prev) => {
           if (prev.min === 0 && prev.sec === 0) {
             clearInterval(interval);
-            setIsBreak((prevIsBreak) => !prevIsBreak);
+            toggleIsBreak();
             setIsRunning(false);
             return prev;
           }
@@ -52,6 +52,10 @@ export function Timer() {
     setIsRunning(false);
     setDuration();
   };
+  const handleSwipeLeftRight = () => {
+    toggleIsBreak();
+    setIsRunning(true);
+  };
 
   const [allowPress, setAllowPress] = useState(true);
   const handlePan = Gesture.Pan()
@@ -62,6 +66,9 @@ export function Timer() {
         event.translationY > 0
       ) {
         handleSwipeDown();
+      }
+      else if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+        handleSwipeLeftRight();
       }
     });
 
@@ -87,4 +94,8 @@ export function Timer() {
       </GestureHandlerRootView>
     </View>
   );
+
+  function toggleIsBreak() {
+    setIsBreak((prevIsBreak) => !prevIsBreak);
+  }
 }
