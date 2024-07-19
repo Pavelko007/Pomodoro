@@ -35,9 +35,7 @@ export function Timer() {
       interval = setInterval(() => {
         setCountdownTime((prev) => {
           if (prev.min === 0 && prev.sec === 0) {
-            clearInterval(interval);
             toggleIsBreak();
-            setIsRunning(false);
             return prev;
           }
 
