@@ -76,7 +76,7 @@ export function Timer() {
   };
 
   return (
-    <View>
+    <View style={{ height: 25}}>
       <GestureHandlerRootView>
         <GestureDetector gesture={handlePan}>
           <Pressable
