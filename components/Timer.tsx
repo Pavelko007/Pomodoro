@@ -5,6 +5,7 @@ import {
   Gesture,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { runOnJS } from 'react-native-reanimated';
 
 export function Timer() {
   const isBreakInit = false;
@@ -45,7 +46,7 @@ export function Timer() {
     }
     return () => clearInterval(interval);
   }, [isRunning]);
-
+  
   const handleSwipeDown = () => {
     setIsRunning(false);
     setCountdownTime(workDuration);
@@ -57,15 +58,15 @@ export function Timer() {
 
   const [allowPress, setAllowPress] = useState(true);
   const handlePan = Gesture.Pan()
-    .onStart(() => setAllowPress(false))
+    .onStart(() => runOnJS(setAllowPress)(false))
     .onEnd((event: any) => {
       if (
         Math.abs(event.translationY) > Math.abs(event.translationX) &&
         event.translationY > 0
       ) {
-        handleSwipeDown();
+        runOnJS(handleSwipeDown)();
       } else if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
-        handleSwipeLeftRight();
+        runOnJS(handleSwipeLeftRight)();
       }
     });
 
